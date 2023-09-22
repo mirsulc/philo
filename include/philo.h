@@ -52,6 +52,7 @@ typedef struct s_data
 	pthread_t	guard;
 	t_forks		*forks;
 	//pthread_t	controller;
+	pthread_mutex_t	docasny;
 	pthread_mutex_t	report;
 	pthread_mutex_t	*forky;
 }	t_data;
@@ -79,7 +80,7 @@ t_philo	*init_philos(int i, t_data *data);
 unsigned long	get_the_time(unsigned long start);
 void	threads_join(t_data *data);
 void	*lets_live();
-void	try_eating(t_philo *philo, t_data *data);
+void	try_eating(t_philo *philo);
 
 void	cleaning(t_data *data);
 unsigned long	wait_f(unsigned long time);

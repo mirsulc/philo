@@ -70,6 +70,7 @@ t_data	*fill_data(int argc, char **argv)
 		data->m2eat = 0;
 	data->live_status = 1;
 	pthread_mutex_init(&data->report, NULL);
+	pthread_mutex_init(&data->docasny, NULL);
 	data->start_time = set_the_time();
 	data->curr_time = get_the_time(data->start_time);
 	return(data);
@@ -109,14 +110,13 @@ void	*lets_live(void *phhill)
 	
 	philo = (t_philo *) phhill;
 	data = philo->data;
-	int	i = 0;
-/*	while (1 && life_guard == 0)
+	while (1 && data->live_status == 1)
 	{
-		
-	*/
-	
-	
-	try_eating(philo, data);
+		if (philo->p_nbr % 2 ==1 && philo->m_eaten == 0)
+			wait_f(data->t2eat);
+		try_eating(philo);
+	}
+
 	
 	
 	
@@ -133,26 +133,27 @@ void	*lets_live(void *phhill)
 	return(NULL);
 }
 
-void	try_eating(t_philo *philo, t_data *data)
+void	try_eating(t_philo *philo)
 {
 	int	i = 0;
-	t_forks *forks = data->forks;
+	unsigned long	eaten;
 	
 //	if(
 	
 	
 	
-//	pthread_mutex_lock(&
 	wait_f(200);
-	philo->eaten_last = get_the_time(philo->eaten_last);
-	fprintf(stderr, "%i eaten_last: %lu\n", philo->p_nbr, philo->eaten_last);
+	eaten = set_the_time() - philo->eaten_last;
+	philo->eaten_last = set_the_time();
+	fprintf(stderr, "%i eaten_last: %lu\n", philo->p_nbr, eaten);
 	life_guard(philo);
-	while(i < data->num_philos)
+	pthread_mutex_lock(&philo->data->docasny);
+	while(i < philo->data->num_philos)
 	{
-		fprintf(stderr, "%lu cislo vidlicky: %d\n", get_the_time(data->start_time), forks[i].f_number);
+		fprintf(stderr, "%lu cislo vidlicky: %d\n", get_the_time(philo->data->start_time), philo->data->forks[i].f_number);
 		i++;
 	}
-//	pthread_mutex_unlock(&
+	pthread_mutex_unlock(&philo->data->docasny);
 }
 void	cleaning(t_data *data)
 {
@@ -161,5 +162,6 @@ void	cleaning(t_data *data)
 //	while(++i < data->num_philos)
 		free(data->philos);
 	pthread_mutex_destroy(&data->report);
+	pthread_mutex_destroy(&data->docasny);
 	free(data);
 }

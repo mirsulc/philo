@@ -34,10 +34,10 @@ unsigned long	wait_f(unsigned long time)
 
 int	life_guard(t_philo *philo)
 {
-	fprintf(stderr, "eaten_last: %lu to_die: %i\n", philo->eaten_last, philo->data->t2die);
+//	fprintf(stderr, "eaten_last: %lu to_die: %i\n", philo->eaten_last, philo->data->t2die);
 	if(philo->eaten_last >= philo->data->t2die)
 	{
-		fprintf(stderr, "eaten_last: %lu to_die: %i\n", philo->eaten_last, philo->data->t2die);
+		//fprintf(stderr, "eaten_last: %lu to_die: %i\n", philo->eaten_last, philo->data->t2die);
 		message(philo, DEAD);
 		philo->data->live_status = 0;
 		return (1);
@@ -47,9 +47,9 @@ int	life_guard(t_philo *philo)
 
 void	message(t_philo *philo, char *state)
 {
-	fprintf(stderr, "state: %s\n", state);	
+//	fprintf(stderr, "state: %s\n", state);	
 	pthread_mutex_lock(&philo->data->report);
-	fprintf(stderr, "philo->p_nbr: %i\n", philo->p_nbr);
+//	fprintf(stderr, "philo->p_nbr: %i\n", philo->p_nbr);
 	printf("%lu %i %s\n", get_the_time(philo->data->start_time), philo->p_nbr, state);
 	pthread_mutex_unlock(&philo->data->report);
 	return ;
