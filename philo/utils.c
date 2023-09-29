@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include "philo.h"
 
 static	int	while_function(const char *str, int result, int i)
 {
@@ -70,32 +70,11 @@ int	ft_looking_for_characters(char **argv)
 		y = 0;
 		while (argv[i][y])
 		{
-			if(ft_isdigit(argv[i][y]) == 0)
+			if (ft_isdigit(argv[i][y]) == 0)
 				return (1);
 			y++;
 		}
 		i++;
 	}
 	return (0);
-}
-
-unsigned long	set_the_time(void)
-{
-	struct timeval	time;
-	int		moment;
-
-	gettimeofday(&time, NULL);
-	moment = (time.tv_sec * 1000) + (time.tv_usec / 1000);
-	return (moment);
-}
-
-unsigned long	get_the_time(unsigned long start)
-{
-	struct timeval	time2;
-	int		curr;
-	
-	gettimeofday(&time2, NULL);
-	curr =  ((time2.tv_sec * 1000) + (time2.tv_usec / 1000)) - start;
-
-	return (curr);
 }
