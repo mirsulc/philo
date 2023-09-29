@@ -59,6 +59,7 @@ int	ft_isdigit(int c)
 	return (0);
 }
 
+//	kontrola vstupnich argumentu 
 int	ft_looking_for_characters(char **argv)
 {
 	int	i;

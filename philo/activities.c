@@ -12,6 +12,8 @@
 
 #include "philo.h"
 
+//	zde pridelujeme pointerum na vidlicky konkretni vidlicky na ktere maji ukazovat
+//	vzdy 2 pro kazdeho filozofa. Take vytvarime loop, ve kterem se budou filozofove pohybovat
 void	*lets_live(void *phhill)
 {
 	t_philo	*philo;
@@ -35,6 +37,7 @@ void	*lets_live(void *phhill)
 	return (NULL);
 }
 
+//	stejna funkce jako vyse, pouze ve variante pro jednoho filozofa (zemre brzy)
 void	*lets_live_short(void *phhill)
 {
 	t_philo	*philo;
@@ -49,6 +52,7 @@ void	*lets_live_short(void *phhill)
 	return (NULL);
 }
 
+//	funkce ve ktere filozofove jedi
 void	try_eating(t_philo *philo)
 {
 	int	i;
@@ -56,24 +60,33 @@ void	try_eating(t_philo *philo)
 	i = 0;
 	if (philo->data->live_status != 1)
 		return ;
+//	zamykame prvni vidlicku pomoci pointeru na ni
 	pthread_mutex_lock(philo->fork[0]);
 	if (philo->data->live_status != 1)
 		return ;
+//	vypis stavu
 	message(philo, FORK);
+//	zamykame druhou vidlicku pomoci pointeru na ni
 	pthread_mutex_lock(philo->fork[1]);
 	if (philo->data->live_status != 1)
 		return ;
 	message(philo, FORK);
+//	nastavujeme aktualni cas, kdy filozof naposledy jedl
 	philo->eaten_last = set_the_time();
 	message(philo, EAT);
+//	tento status slouzi k rozliseni, kdy filozof ji, tak aby v te dobe nemohl zemrit
 	philo->status = 1;
+//	funkce wait_f k pozastaveni casu po dobu, kdy filozof ji
 	wait_f(philo->data->t2eat);
 	philo->status = 0;
+//	update poctu snedenych jidel
 	philo->m_eaten++;
+//	odemknuti obou vidlicek
 	unlock_forks(philo);
 	return ;
 }
 
+//	funkce, ktera ma na starost filozofuv spanek
 void	try_sleeping(t_philo *philo)
 {
 	if (philo->data->live_status == 1)
@@ -83,6 +96,7 @@ void	try_sleeping(t_philo *philo)
 	}
 }
 
+//	funkce, ktra se stara o filozofovo mysleni
 void	try_thinking(t_philo *philo)
 {
 	if (philo->data->live_status == 1)

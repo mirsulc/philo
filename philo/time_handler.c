@@ -12,6 +12,7 @@
 
 #include "philo.h"
 
+//	tato funkce slouzi k urceni presneho casu
 unsigned long	set_the_time(void)
 {
 	struct timeval		time;
@@ -22,6 +23,7 @@ unsigned long	set_the_time(void)
 	return (moment);
 }
 
+//	tato fce slouzi k urceni intervalu od urciteho bodu v case (treba startu) do aktualniho casu
 unsigned long	get_the_time(unsigned long start)
 {
 	struct timeval		time2;
@@ -32,6 +34,7 @@ unsigned long	get_the_time(unsigned long start)
 	return (curr);
 }
 
+//	funkce, ktera se stara o zadane casy t2eat, t2die, t2sleep
 unsigned long	wait_f(unsigned long time)
 {
 	return (usleep(time * 1000));

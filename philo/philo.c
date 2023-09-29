@@ -23,22 +23,28 @@ int	main(int argc, char *argv[])
 		return (1);
 	data = fill_data(argc, argv);
 	data->start_time = set_the_time();
+//	pokud pouze jeden filozof	
 	if (ft_atoi(argv[1]) == 1)
 		init_one(philo, data);
 	else
 	{
 		while (++i < data->num_philos)
 		{
+//	inicializace/vytvoreni filozofu a vytvoreni patricneho mnozstvi threadu
+//	ktere pokracuji do funkce lets_live
 			philo = init_philos(i + 1, data);
 			pthread_create(&(data->thread[i]), NULL, \
 				&lets_live, (void *) philo);
 		}
 	}
+//	vytvoreni threadu, ktery kontroluje zdravotni stav filozofu - jestli neprekrocili cas smrti
 	pthread_create(&data->guard, NULL, &life_guard, (void *) data);
+//	ukonceni threadu
 	threads_join(data);
 	return (cleaning(data), 0);
 }
 
+//	tato funkce plni data do struktury data
 t_data	*fill_data(int argc, char **argv)
 {
 	t_data	*data;
@@ -54,6 +60,7 @@ t_data	*fill_data(int argc, char **argv)
 	data->forky = malloc(sizeof(pthread_mutex_t) * data->num_philos);
 	if (!data->philos || !data->thread || !data->forky)
 		return (NULL);
+//	inicializace mutexu pro vidlicky
 	while (++i < data->num_philos)
 		pthread_mutex_init(&data->forky[i], NULL);
 	data->t2die = ft_atoi(argv[2]);
@@ -64,10 +71,12 @@ t_data	*fill_data(int argc, char **argv)
 	else
 		data->m2eat = 1000000000;
 	data->live_status = 1;
+//	inicializace mutexu pro vypis stavu filozofu
 	pthread_mutex_init(&data->report, NULL);
 	return (data);
 }
 
+//	tato funkce vytvari kazdeho filozofa
 t_philo	*init_philos(int i, t_data *data)
 {
 	t_philo	*philo;
@@ -81,6 +90,7 @@ t_philo	*init_philos(int i, t_data *data)
 	return (philo);
 }
 
+//	tato funkce ukoncuje/spojuje thready filozofu
 void	threads_join(t_data *data)
 {
 	t_philo	*philo;
@@ -95,6 +105,7 @@ void	threads_join(t_data *data)
 	}
 }
 
+//	povinne cisteni pameti, ukoncovani mutexu a threadu kontrolni funkce
 void	cleaning(t_data *data)
 {
 	int	i;
